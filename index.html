@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#C4726C">
+  <title>Deutsch üben – Kidsneed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --s-1:8px;--s-2:16px;--s-3:24px;--s-4:32px;
+      --radius-sm:12px;--radius-md:16px;--radius-lg:24px;--radius-xl:28px;
+      --shadow-soft:0 2px 10px rgba(45,42,38,.10);--shadow-subtle:0 1px 3px rgba(45,42,38,.06);
+      --bg-canvas:#F5F0E8;--bg-card:#FFFFFF;--bg-muted:#EDE8DC;
+      --ink-primary:#2D2A26;--ink-secondary:#6B665C;--ink-light:#9C9588;
+      --accent:#C4726C;--accent-light:rgba(196,114,108,.12);--accent-dark:#A85A54;
+      --color-success:#7BA08A;--color-success-bg:rgba(123,160,138,.15);
+      --color-error:#C4726C;--color-error-bg:rgba(196,114,108,.15);
+      --text-2xl:24px;--text-xl:20px;--text-lg:18px;--text-md:16px;--text-sm:14px;--text-xs:12px;
+      --motion-fast:150ms;--ease-out:cubic-bezier(0.33,1,0.68,1);
+      --app-max-w:560px;--font:'Nunito',system-ui,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg-canvas);color:var(--ink-primary);font-family:var(--font);font-weight:600;font-size:var(--text-md);line-height:1.5;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    *:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:var(--radius-sm)}
+    @media(prefers-reduced-motion:reduce){*{transition-duration:0.01ms!important;animation-duration:0.01ms!important}}
+    .app-frame{width:100%;height:100%;background:var(--bg-card);display:flex;flex-direction:column;overflow:hidden;position:relative}
+    @media(min-width:520px){body{padding:var(--s-3)}.app-frame{max-width:var(--app-max-w);height:94dvh;max-height:920px;border:3px solid var(--ink-primary);border-radius:var(--radius-lg);box-shadow:var(--shadow-subtle)}}
+    header{height:72px;padding:0 var(--s-3);display:flex;align-items:center;justify-content:space-between;gap:var(--s-2);border-bottom:3px solid var(--ink-primary);background:var(--bg-card);flex:0 0 auto}
+    .brand{display:flex;flex-direction:column;gap:2px}.brand-title{font-size:var(--text-xl);font-weight:900;letter-spacing:-0.02em;line-height:1.1}.brand-subtitle{font-size:var(--text-xs);font-weight:900;text-transform:uppercase;letter-spacing:.10em;color:var(--ink-secondary)}
+    .header-stats{display:flex;gap:var(--s-1);align-items:center}
+    .pill{min-height:48px;padding:10px 12px;border-radius:var(--radius-sm);border:2px solid var(--ink-primary);background:var(--bg-muted);display:flex;align-items:center;gap:6px;cursor:pointer;transition:transform var(--motion-fast) var(--ease-out)}.pill:hover{box-shadow:var(--shadow-soft);transform:translateY(-1px)}.pill:active{transform:scale(0.98)}.pill .icon{font-size:16px}.pill .val{font-weight:900;font-size:var(--text-sm);font-variant-numeric:tabular-nums}
+    .viewport{flex:1;overflow-y:auto;padding:var(--s-3);background:radial-gradient(1200px 340px at 50% 0%,rgba(196,114,108,.08),transparent 60%),var(--bg-card);overscroll-behavior:contain}
+    .card{border:3px solid var(--ink-primary);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-subtle);margin-bottom:var(--s-3)}.card-section{padding:var(--s-3)}.card-section+.card-section{border-top:3px solid var(--ink-primary)}
+    .section-label{font-size:var(--text-xs);font-weight:900;text-transform:uppercase;letter-spacing:.10em;color:var(--ink-secondary);margin-bottom:var(--s-2)}
+    .controls-row{display:flex;gap:var(--s-2);flex-wrap:wrap}.control-group{flex:1;min-width:120px}.control-group label{display:block;font-size:var(--text-xs);font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-secondary);margin-bottom:var(--s-1)}
+    select{width:100%;min-height:48px;padding:12px 14px;border-radius:var(--radius-sm);border:2px solid var(--ink-primary);background:var(--bg-muted);font-family:var(--font);font-weight:900;font-size:var(--text-sm);color:var(--ink-primary);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232D2A26' d='M6 8L2 4h8z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+    .grade-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-1)}.grade-btn{min-height:52px;border-radius:var(--radius-sm);border:2px solid var(--ink-primary);background:var(--bg-muted);font-family:var(--font);font-weight:900;font-size:var(--text-lg);color:var(--ink-primary);cursor:pointer;transition:transform var(--motion-fast) var(--ease-out)}.grade-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-soft)}.grade-btn:active{transform:scale(0.98)}.grade-btn.selected{background:var(--accent);color:white;border-color:var(--accent-dark)}
+    .task-area{background:var(--bg-muted);border:3px solid var(--ink-primary);border-radius:var(--radius-md);padding:var(--s-4) var(--s-3);min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--s-1)}.task-label{font-size:var(--text-xs);font-weight:900;text-transform:uppercase;letter-spacing:.10em;color:var(--accent)}.task-text{font-size:clamp(1.25rem,5vw,1.5rem);font-weight:900;text-align:center;line-height:1.4;color:var(--ink-primary);white-space:pre-wrap}
+    .answers{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s-2);margin-top:var(--s-3)}.answers.three-cols{grid-template-columns:repeat(3,1fr)}
+    .answer-btn{padding:var(--s-2) var(--s-3);border:3px solid var(--ink-primary);border-radius:var(--radius-md);background:var(--bg-card);font-family:var(--font);font-size:var(--text-md);font-weight:900;color:var(--ink-primary);cursor:pointer;transition:transform var(--motion-fast) var(--ease-out);min-height:56px;display:flex;align-items:center;justify-content:center;text-align:center}.answer-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-soft);background:var(--accent-light)}.answer-btn:active{transform:scale(0.98)}.answer-btn.correct{background:var(--color-success);border-color:var(--color-success);color:white}.answer-btn.incorrect{background:var(--color-error);border-color:var(--color-error);color:white}.answer-btn:disabled{cursor:not-allowed;opacity:.7}
+    .feedback{margin-top:var(--s-3);padding:var(--s-2);border-radius:var(--radius-sm);border:2px solid var(--ink-primary);background:var(--bg-muted);font-weight:800;font-size:var(--text-sm);color:var(--ink-secondary);display:flex;align-items:flex-start;gap:10px}.feedback .ficon{font-size:18px;flex-shrink:0}.feedback.success{background:var(--color-success-bg);border-color:var(--color-success);color:#2D5A3A}.feedback.error{background:var(--color-error-bg);border-color:var(--color-error);color:#6B3A32}
+    .history-dots{display:flex;gap:6px;margin-top:var(--s-2);justify-content:center;flex-wrap:wrap}.dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--ink-primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900}.dot.correct{background:var(--color-success-bg);border-color:var(--color-success);color:var(--color-success)}.dot.incorrect{background:var(--color-error-bg);border-color:var(--color-error);color:var(--color-error)}
+    .btn{min-height:52px;padding:14px 18px;border-radius:var(--radius-sm);border:2px solid var(--ink-primary);background:var(--bg-card);color:var(--ink-secondary);font-family:var(--font);font-weight:900;font-size:var(--text-md);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform var(--motion-fast) var(--ease-out);text-decoration:none}.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-soft)}.btn:active{transform:translateY(1px)}.btn.primary{background:var(--accent);color:white;border-color:var(--accent-dark)}.btn.primary:hover{filter:brightness(1.05)}.btn:disabled{opacity:.4;cursor:not-allowed}
+    .actions{display:flex;gap:var(--s-2);margin-top:var(--s-3)}.actions .btn{flex:1}
+    footer{flex:0 0 auto;padding:var(--s-2) var(--s-3);padding-bottom:max(var(--s-2),env(safe-area-inset-bottom));background:var(--bg-card);border-top:3px solid var(--ink-primary);display:flex;gap:var(--s-2)}footer .btn{flex:1}
+    .overlay{position:absolute;inset:0;background:rgba(0,0,0,.26);display:none;align-items:flex-end;justify-content:center;padding:var(--s-3);z-index:100}.overlay.open{display:flex}
+    .sheet{width:100%;max-width:560px;max-height:85vh;overflow-y:auto;border:3px solid var(--ink-primary);border-radius:var(--radius-xl);background:var(--bg-card);box-shadow:var(--shadow-soft);padding:var(--s-3);animation:slideUp var(--motion-fast) var(--ease-out)}.sheet h2{margin:0 0 var(--s-1);font-size:var(--text-xl);font-weight:900;text-align:center}.sheet>p{margin:0 0 var(--s-3);color:var(--ink-secondary);font-weight:800;font-size:var(--text-sm);text-align:center}.sheet-actions{display:flex;gap:var(--s-2);margin-top:var(--s-3)}.sheet-actions .btn{flex:1}
+    .settings-group{background:var(--bg-muted);border:2px solid var(--ink-primary);border-radius:var(--radius-md);overflow:hidden}.setting-row{display:flex;justify-content:space-between;align-items:center;padding:var(--s-2);min-height:56px}.setting-row+.setting-row{border-top:2px solid var(--ink-primary)}.setting-label{font-weight:900;font-size:var(--text-sm);color:var(--ink-primary)}
+    .toggle{width:52px;height:32px;background:var(--bg-canvas);border:2px solid var(--ink-primary);border-radius:16px;position:relative;cursor:pointer}.toggle::after{content:'';position:absolute;width:24px;height:24px;background:var(--bg-card);border:2px solid var(--ink-primary);border-radius:12px;top:2px;left:2px;transition:left var(--motion-fast)}.toggle.on{background:var(--color-success);border-color:var(--color-success)}.toggle.on::after{left:22px;border-color:var(--color-success)}
+    .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s-2);margin-bottom:var(--s-3)}.stat-card{background:var(--bg-muted);border:2px solid var(--ink-primary);border-radius:var(--radius-md);padding:var(--s-2);text-align:center}.stat-card-value{font-size:var(--text-2xl);font-weight:900;color:var(--accent);font-variant-numeric:tabular-nums}.stat-card-label{font-size:var(--text-xs);font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-secondary);margin-top:4px}
+    .explain-box{background:var(--bg-muted);border:2px solid var(--ink-primary);border-radius:var(--radius-md);padding:var(--s-3)}.explain-title{font-weight:900;font-size:var(--text-sm);color:var(--accent);margin-bottom:var(--s-2)}.explain-result{background:var(--accent);color:white;padding:var(--s-2);border-radius:var(--radius-md);text-align:center;font-weight:900;font-size:var(--text-lg);margin-top:var(--s-2)}
+    @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:400px){header{padding:0 var(--s-2)}.viewport{padding:var(--s-2)}footer{padding:var(--s-2)}.brand-title{font-size:var(--text-lg)}.pill{padding:8px 10px;min-height:44px}.grade-btn{min-height:48px;font-size:var(--text-md)}.answer-btn{font-size:var(--text-sm);min-height:52px}.btn{min-height:48px;font-size:var(--text-sm)}}
+  </style>
+</head>
+<body>
+  <div class="app-frame">
+    <header>
+      <div class="brand">
+        <div class="brand-title">📝 Deutsch üben</div>
+        <div class="brand-subtitle">Kidsneed</div>
+      </div>
+      <div class="header-stats">
+        <div class="pill" id="stats-pill" role="button" tabindex="0"><span class="icon">✓</span><span class="val" id="score">0</span>/<span class="val" id="total">0</span></div>
+        <div class="pill"><span class="icon">🔥</span><span class="val" id="streak">0</span></div>
+      </div>
+    </header>
+    <main class="viewport">
+      <div class="card">
+        <section class="card-section">
+          <div class="section-label">Einstellungen</div>
+          <div class="controls-row">
+            <div class="control-group">
+              <label>Aufgabentyp</label>
+              <select id="task-type">
+                <option value="random">🎲 Zufällig</option>
+                <optgroup label="Rechtschreibung">
+                  <option value="spelling">Rechtschreibung</option>
+                  <option value="sSharp">s, ss oder ß</option>
+                  <option value="capitalization">Groß-/Kleinschreibung</option>
+                  <option value="punctuation">Satzzeichen</option>
+                  <option value="syllables">Silbentrennung</option>
+                </optgroup>
+                <optgroup label="Grammatik">
+                  <option value="artikel">Artikel</option>
+                  <option value="plural">Mehrzahl</option>
+                  <option value="wortart">Wortarten</option>
+                  <option value="wfrage">W-Fragen</option>
+                  <option value="fall">4 Fälle</option>
+                  <option value="verb">Verben/Konjugation</option>
+                  <option value="zeitform">Zeitformen</option>
+                  <option value="preposition">Präpositionen</option>
+                  <option value="satzbau">Satzbau</option>
+                </optgroup>
+                <optgroup label="Wortschatz">
+                  <option value="opposite">Gegenteile</option>
+                  <option value="synonym">Synonyme</option>
+                  <option value="compound">Zusammengesetzte Wörter</option>
+                  <option value="wordFamily">Wortfamilien</option>
+                  <option value="oberbegriff">Oberbegriffe</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="control-group">
+              <label>Klassenstufe</label>
+              <div class="grade-grid" id="grades">
+                <button class="grade-btn" data-g="1" type="button">1</button>
+                <button class="grade-btn selected" data-g="2" type="button">2</button>
+                <button class="grade-btn" data-g="3" type="button">3</button>
+                <button class="grade-btn" data-g="4" type="button">4</button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="card-section">
+          <div class="task-area">
+            <div class="task-label" id="task-focus">Starte eine Aufgabe</div>
+            <div class="task-text" id="task-question">Wähle einen Aufgabentyp und klicke auf "Neue Aufgabe"</div>
+          </div>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback"><span class="ficon">🎯</span><span>Wähle eine Klasse und starte.</span></div>
+          <div class="history-dots" id="history-dots"></div>
+        </section>
+        <section class="card-section">
+          <div class="actions">
+            <button class="btn" id="help-btn" disabled type="button">💡 Erklärung</button>
+            <button class="btn primary" id="start-btn" type="button">Neue Aufgabe</button>
+          </div>
+        </section>
+      </div>
+    </main>
+    <footer>
+      <a class="btn" href="https://humaneed.github.io/kidsneed/">← Hub</a>
+      <button class="btn" id="settings-btn" type="button">⚙️</button>
+      <button class="btn" id="stats-btn" type="button">📊</button>
+    </footer>
+    <div class="overlay" id="modal-help"><div class="sheet"><h2>💡 Erklärung</h2><div id="help-content"></div><div class="sheet-actions"><button class="btn primary" id="ok-help" type="button">Verstanden</button></div></div></div>
+    <div class="overlay" id="modal-settings"><div class="sheet"><h2>⚙️ Einstellungen</h2><p>Passe dein Übungserlebnis an.</p><div class="settings-group"><div class="setting-row"><span class="setting-label">Töne</span><div class="toggle on" id="toggle-sound" role="switch"></div></div><div class="setting-row"><span class="setting-label">Tastaturkürzel</span><div class="toggle on" id="toggle-keyboard" role="switch"></div></div></div><div class="sheet-actions"><button class="btn" id="reset-stats" type="button">🗑️ Reset</button><button class="btn primary" id="ok-settings" type="button">Fertig</button></div></div></div>
+    <div class="overlay" id="modal-stats"><div class="sheet"><h2>📊 Statistiken</h2><div id="stats-content"></div><div class="sheet-actions"><button class="btn primary" id="ok-stats" type="button">Schließen</button></div></div></div>
+  </div>
+<script>
+(function(){'use strict';
+const $=id=>document.getElementById(id);
+const Utils={rnd:(a,b)=>Math.floor(Math.random()*(b-a+1))+a,pick:a=>a[Math.floor(Math.random()*a.length)],shuffle:a=>a.slice().sort(()=>Math.random()-.5)};
+
+// === STATE ===
+const state={grade:2,score:0,total:0,streak:0,maxStreak:0,currentTask:null,answered:false,history:[],settings:{sound:true,keyboard:true}};
+
+// === AUDIO ===
+const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+const playBeep=(f,d,t='sine')=>{if(!state.settings.sound)return;if(audioCtx.state==='suspended')audioCtx.resume();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.01,audioCtx.currentTime+d);o.start();o.stop(audioCtx.currentTime+d)};
+const playCorrect=()=>{playBeep(523,.12);setTimeout(()=>playBeep(659,.15),100)};
+const playIncorrect=()=>playBeep(294,.2,'triangle');
+
+// === STORAGE ===
+const saveState=()=>{try{localStorage.setItem('kidsneed_deutsch',JSON.stringify({score:state.score,total:state.total,streak:state.streak,maxStreak:state.maxStreak,history:state.history.slice(-30),settings:state.settings,grade:state.grade}))}catch{}};
+const loadState=()=>{try{const s=JSON.parse(localStorage.getItem('kidsneed_deutsch'));if(s){Object.assign(state,{score:s.score||0,total:s.total||0,streak:s.streak||0,maxStreak:s.maxStreak||0,history:s.history||[],grade:s.grade||2});state.settings={...state.settings,...s.settings};document.querySelectorAll('.grade-btn').forEach(b=>b.classList.toggle('selected',+b.dataset.g===state.grade));$('toggle-sound').classList.toggle('on',state.settings.sound);$('toggle-keyboard').classList.toggle('on',state.settings.keyboard)}}catch{}};
+
+// === DATABASE ===
+const NOUNS={1:[{w:'Hund',a:'der',p:'Hunde'},{w:'Katze',a:'die',p:'Katzen'},{w:'Maus',a:'die',p:'Mäuse'},{w:'Vogel',a:'der',p:'Vögel'},{w:'Fisch',a:'der',p:'Fische'},{w:'Pferd',a:'das',p:'Pferde'},{w:'Kuh',a:'die',p:'Kühe'},{w:'Ball',a:'der',p:'Bälle'},{w:'Puppe',a:'die',p:'Puppen'},{w:'Auto',a:'das',p:'Autos'},{w:'Buch',a:'das',p:'Bücher'},{w:'Haus',a:'das',p:'Häuser'},{w:'Tür',a:'die',p:'Türen'},{w:'Tisch',a:'der',p:'Tische'},{w:'Stuhl',a:'der',p:'Stühle'},{w:'Bett',a:'das',p:'Betten'},{w:'Brot',a:'das',p:'Brote'},{w:'Apfel',a:'der',p:'Äpfel'},{w:'Milch',a:'die',p:'Milch'},{w:'Wasser',a:'das',p:'Wasser'}],2:[{w:'Schule',a:'die',p:'Schulen'},{w:'Lehrer',a:'der',p:'Lehrer'},{w:'Schüler',a:'der',p:'Schüler'},{w:'Klasse',a:'die',p:'Klassen'},{w:'Heft',a:'das',p:'Hefte'},{w:'Stift',a:'der',p:'Stifte'},{w:'Fenster',a:'das',p:'Fenster'},{w:'Zimmer',a:'das',p:'Zimmer'},{w:'Küche',a:'die',p:'Küchen'},{w:'Garten',a:'der',p:'Gärten'},{w:'Straße',a:'die',p:'Straßen'},{w:'Kopf',a:'der',p:'Köpfe'},{w:'Hand',a:'die',p:'Hände'},{w:'Fuß',a:'der',p:'Füße'},{w:'Auge',a:'das',p:'Augen'},{w:'Ohr',a:'das',p:'Ohren'}],3:[{w:'Mädchen',a:'das',p:'Mädchen',t:'-chen ist neutral'},{w:'Brötchen',a:'das',p:'Brötchen',t:'-chen'},{w:'Freiheit',a:'die',p:'Freiheiten',t:'-heit ist feminin'},{w:'Krankheit',a:'die',p:'Krankheiten',t:'-heit'},{w:'Freundschaft',a:'die',p:'Freundschaften',t:'-schaft ist feminin'},{w:'Zeitung',a:'die',p:'Zeitungen',t:'-ung ist feminin'},{w:'Wohnung',a:'die',p:'Wohnungen',t:'-ung'},{w:'Geheimnis',a:'das',p:'Geheimnisse',t:'-nis ist neutral'},{w:'Computer',a:'der',p:'Computer'},{w:'Telefon',a:'das',p:'Telefone'}],4:[{w:'Philosophie',a:'die',p:'Philosophien',t:'-ie ist feminin'},{w:'Demokratie',a:'die',p:'Demokratien',t:'-ie'},{w:'Bibliothek',a:'die',p:'Bibliotheken',t:'-thek ist feminin'},{w:'Gymnasium',a:'das',p:'Gymnasien',t:'-um ist neutral'},{w:'Museum',a:'das',p:'Museen',t:'-um'},{w:'Argument',a:'das',p:'Argumente',t:'-ment ist neutral'},{w:'Universität',a:'die',p:'Universitäten',t:'-ität ist feminin'},{w:'Information',a:'die',p:'Informationen',t:'-tion ist feminin'}]};
+
+const SPELLING={1:[{w:'Hund',x:['Hunt','Hunnt'],t:'Verlängere: Hunde → d'},{w:'Wald',x:['Walt','Wallt'],t:'Verlängere: Wälder → d'},{w:'Ball',x:['Bal','Bahl'],t:'a ist kurz → ll'},{w:'Sonne',x:['Sone','Sohne'],t:'o ist kurz → nn'},{w:'Bett',x:['Bet','Beht'],t:'e ist kurz → tt'},{w:'Wasser',x:['Waser','Waßer'],t:'a ist kurz → ss'}],2:[{w:'Biene',x:['Bine','Bihne'],t:'i ist lang → ie'},{w:'Liebe',x:['Libe','Libbe'],t:'i ist lang → ie'},{w:'Wiese',x:['Wise','Wisse'],t:'i ist lang → ie'},{w:'Zahn',x:['Zan','Zaahn'],t:'a ist lang → ah'},{w:'Sohn',x:['Son','Soon'],t:'o ist lang → oh'},{w:'Vogel',x:['Fogel','Vohgel'],t:'V klingt wie F'}],3:[{w:'Fahrrad',x:['Fahrad','Farrad'],t:'fahr + Rad'},{w:'Handschuh',x:['Hantschuh','Handschuch'],t:'Hand + Schuh'},{w:'plötzlich',x:['plötzlig','plözlich'],t:'-lich, nicht -lig'},{w:'eigentlich',x:['eigendlich','eigenlich'],t:'eigen+t+lich'},{w:'Verkehr',x:['Ferkehr','Verkär'],t:'Ver- mit V'}],4:[{w:'Rhythmus',x:['Rythmus','Rhytmus'],t:'rh und th'},{w:'Alphabet',x:['Alfabet','Alphabeth'],t:'ph wie f'},{w:'Theater',x:['Teater','Thearter'],t:'th am Anfang'},{w:'Computer',x:['Kompjuter','Computor'],t:'c und u'}]};
+
+const S_SHARP=[{w:'Straße',x:['Strasse','Strase'],t:'a ist lang → ß'},{w:'Fuß',x:['Fuss','Fus'],t:'u ist lang → ß'},{w:'groß',x:['gross','gros'],t:'o ist lang → ß'},{w:'weiß',x:['weiss','weis'],t:'ei → ß'},{w:'heiß',x:['heiss','heis'],t:'ei → ß'},{w:'Wasser',x:['Waßer','Waser'],t:'a ist kurz → ss'},{w:'Fluss',x:['Fluß','Flus'],t:'u ist kurz → ss'},{w:'nass',x:['naß','nas'],t:'a ist kurz → ss'},{w:'Hase',x:['Hasse','Haße'],t:'a ist lang, stimmhaft → s'},{w:'Rose',x:['Rosse','Roße'],t:'o ist lang, stimmhaft → s'}];
+
+const VERBS={1:[{i:'spielen',p:'ich',c:'spiele',r:'ich -e'},{i:'spielen',p:'du',c:'spielst',r:'du -st'},{i:'spielen',p:'er/sie/es',c:'spielt',r:'-t'},{i:'malen',p:'ich',c:'male',r:'ich -e'},{i:'hören',p:'du',c:'hörst',r:'du -st'}],2:[{i:'haben',p:'ich',c:'habe',r:'unregelmäßig'},{i:'haben',p:'du',c:'hast',r:'unregelmäßig'},{i:'sein',p:'ich',c:'bin',r:'unregelmäßig'},{i:'sein',p:'du',c:'bist',r:'unregelmäßig'},{i:'fahren',p:'du',c:'fährst',r:'a → ä'},{i:'laufen',p:'du',c:'läufst',r:'au → äu'}],3:[{i:'werden',p:'ich',c:'werde',r:'unregelmäßig'},{i:'nehmen',p:'du',c:'nimmst',r:'e → i'},{i:'geben',p:'er/sie/es',c:'gibt',r:'e → i'},{i:'sprechen',p:'du',c:'sprichst',r:'e → i'},{i:'essen',p:'du',c:'isst',r:'e → i'}],4:[{i:'wissen',p:'ich',c:'weiß',r:'unregelmäßig'},{i:'können',p:'ich',c:'kann',r:'Modalverb'},{i:'müssen',p:'ich',c:'muss',r:'Modalverb'},{i:'dürfen',p:'ich',c:'darf',r:'Modalverb'},{i:'wollen',p:'ich',c:'will',r:'Modalverb'}]};
+
+const OPPOSITES=[{w:'groß',o:'klein',x:['lang','hoch']},{w:'schnell',o:'langsam',x:['leise','weit']},{w:'hell',o:'dunkel',x:['laut','schwer']},{w:'warm',o:'kalt',x:['nass','hart']},{w:'laut',o:'leise',x:['schnell','hell']},{w:'jung',o:'alt',x:['neu','groß']},{w:'schwer',o:'leicht',x:['hart','dick']},{w:'dick',o:'dünn',x:['groß','schwer']},{w:'lang',o:'kurz',x:['groß','breit']},{w:'gut',o:'schlecht',x:['böse','falsch']},{w:'richtig',o:'falsch',x:['schlecht','bös']},{w:'schön',o:'hässlich',x:['schlecht','böse']},{w:'voll',o:'leer',x:['schwer','groß']},{w:'nass',o:'trocken',x:['kalt','warm']},{w:'Tag',o:'Nacht',x:['Morgen','Abend']},{w:'Sommer',o:'Winter',x:['Frühling','Herbst']},{w:'Freund',o:'Feind',x:['Gegner','Fremder']},{w:'Anfang',o:'Ende',x:['Mitte','Start']},{w:'Frage',o:'Antwort',x:['Lösung','Rätsel']},{w:'oben',o:'unten',x:['vorne','hinten']}];
+
+const SYNONYMS=[{w:'schön',s:['hübsch','toll','wunderbar'],x:['hässlich','klein']},{w:'schnell',s:['rasch','flink','zügig'],x:['langsam','träge']},{w:'groß',s:['riesig','gewaltig','enorm'],x:['klein','winzig']},{w:'klug',s:['schlau','intelligent','clever'],x:['dumm','blöd']},{w:'froh',s:['glücklich','fröhlich','heiter'],x:['traurig','betrübt']},{w:'wütend',s:['zornig','ärgerlich','sauer'],x:['ruhig','gelassen']},{w:'nett',s:['freundlich','lieb','höflich'],x:['gemein','böse']},{w:'sagen',s:['sprechen','reden','erzählen'],x:['schweigen','hören']},{w:'gehen',s:['laufen','wandern','schreiten'],x:['stehen','sitzen']},{w:'machen',s:['tun','herstellen','anfertigen'],x:['lassen','aufhören']}];
+
+const COMPOUNDS=[{p:['Hand','Schuh'],c:'Handschuh',e:'Schuh für die Hand'},{p:['Haus','Tür'],c:'Haustür',e:'Tür des Hauses'},{p:['Schul','Hof'],c:'Schulhof',e:'Hof der Schule'},{p:['Blumen','Topf'],c:'Blumentopf',e:'Topf für Blumen'},{p:['Regen','Schirm'],c:'Regenschirm',e:'Schutz vor Regen'},{p:['Fahr','Rad'],c:'Fahrrad',e:'Rad zum Fahren'},{p:['Tisch','Lampe'],c:'Tischlampe',e:'Lampe für den Tisch'},{p:['Apfel','Baum'],c:'Apfelbaum',e:'Baum mit Äpfeln'},{p:['Sonnen','Brille'],c:'Sonnenbrille',e:'Brille gegen Sonne'},{p:['Geburts','Tag'],c:'Geburtstag',e:'Tag der Geburt'}];
+
+const CATEGORIES=[{c:'Tier',m:['Hund','Katze','Vogel','Fisch','Pferd'],x:['Baum','Auto']},{c:'Obst',m:['Apfel','Birne','Banane','Orange','Kirsche'],x:['Gurke','Karotte']},{c:'Gemüse',m:['Gurke','Karotte','Tomate','Salat','Zwiebel'],x:['Apfel','Birne']},{c:'Möbel',m:['Tisch','Stuhl','Schrank','Bett','Sofa'],x:['Lampe','Teppich']},{c:'Fahrzeug',m:['Auto','Bus','Zug','Fahrrad','Schiff'],x:['Haus','Baum']},{c:'Kleidung',m:['Hose','Hemd','Jacke','Kleid','Schuh'],x:['Tasche','Uhr']},{c:'Körperteil',m:['Kopf','Hand','Fuß','Arm','Bein'],x:['Stuhl','Tisch']},{c:'Farbe',m:['Rot','Blau','Grün','Gelb','Orange'],x:['Kreis','Quadrat']}];
+
+const SYLLABLES=[{w:'Blume',c:'Blu-me',x:['Bl-ume','Blum-e'],e:'Konsonant+Vokal'},{w:'Fenster',c:'Fens-ter',x:['Fen-ster','Fenst-er'],e:'st bleibt'},{w:'Kinder',c:'Kin-der',x:['Kind-er','Ki-nder'],e:'Nach kurzem Vokal'},{w:'Butter',c:'But-ter',x:['Butt-er','Bu-tter'],e:'Doppelkonsonant trennen'},{w:'Lehrer',c:'Leh-rer',x:['Le-hrer','Lehr-er'],e:'Nach langem Vokal'},{w:'Apfel',c:'Ap-fel',x:['A-pfel','Apf-el'],e:'pf bleibt'},{w:'Backen',c:'Ba-cken',x:['Bac-ken','Back-en'],e:'ck → k-k'},{w:'Sommer',c:'Som-mer',x:['So-mmer','Somm-er'],e:'Doppelkonsonant trennen'}];
+
+const CAPITALIZATION=[{s:'Der ___ bellt laut.',c:'Hund',x:'hund',e:'Nomen → groß'},{s:'Die ___ scheint.',c:'Sonne',x:'sonne',e:'Nomen → groß'},{s:'Wir ___ heute.',c:'spielen',x:'Spielen',e:'Verb → klein'},{s:'Er ___ schnell.',c:'läuft',x:'Läuft',e:'Verb → klein'},{s:'Das Haus ist ___.',c:'groß',x:'Groß',e:'Adjektiv → klein'},{s:'Am ___ gehe ich schwimmen.',c:'Montag',x:'montag',e:'Wochentag → groß'},{s:'Das ___ macht Spaß.',c:'Schwimmen',x:'schwimmen',e:'Substantiviertes Verb → groß'}];
+
+const PUNCTUATION=[{s:'Wie heißt du',c:'?',t:'Fragesatz',e:'Fragen → ?'},{s:'Kommst du mit',c:'?',t:'Fragesatz',e:'Fragen → ?'},{s:'Pass auf',c:'!',t:'Befehl',e:'Befehle → !'},{s:'Hilfe',c:'!',t:'Ausruf',e:'Hilferufe → !'},{s:'Heute ist Montag',c:'.',t:'Aussagesatz',e:'Aussagen → .'},{s:'Der Himmel ist blau',c:'.',t:'Aussagesatz',e:'Aussagen → .'},{s:'Die Sonne scheint',c:'.',t:'Aussagesatz',e:'Aussagen → .'}];
+
+const WORD_TYPES={2:[{w:'laufen',t:'Verb',h:'Tuwort'},{w:'spielen',t:'Verb',h:'Tuwort'},{w:'schön',t:'Adjektiv',h:'Wiewort'},{w:'schnell',t:'Adjektiv',h:'Wiewort'},{w:'Hund',t:'Nomen',h:'Namenwort'},{w:'Baum',t:'Nomen',h:'Namenwort'}],3:[{w:'er',t:'Pronomen',h:'Fürwort'},{w:'sie',t:'Pronomen',h:'Fürwort'},{w:'der',t:'Artikel',h:'Begleiter'},{w:'die',t:'Artikel',h:'Begleiter'},{w:'heute',t:'Adverb',h:'Umstandswort'},{w:'dort',t:'Adverb',h:'Umstandswort'}],4:[{w:'auf',t:'Präposition',h:'Verhältniswort'},{w:'unter',t:'Präposition',h:'Verhältniswort'},{w:'und',t:'Konjunktion',h:'Bindewort'},{w:'aber',t:'Konjunktion',h:'Bindewort'},{w:'weil',t:'Konjunktion',h:'Bindewort'}]};
+
+const PREPOSITIONS=[{s:'Das Buch liegt ___ dem Tisch.',c:'auf',o:['auf','unter','neben'],e:'auf → Position obenauf'},{s:'Die Katze sitzt ___ dem Stuhl.',c:'unter',o:['unter','über','auf'],e:'unter → unterhalb'},{s:'Er steht ___ der Tür.',c:'vor',o:['vor','hinter','neben'],e:'vor → davor'},{s:'Das Geschenk ist ___ dich.',c:'für',o:['für','mit','von'],e:'für + Akkusativ'},{s:'Ich komme ___ der Schule.',c:'aus',o:['aus','in','zu'],e:'aus + Dativ'},{s:'Wir gehen ___ Oma.',c:'zu',o:['zu','nach','bei'],e:'zu + Dativ'},{s:'Er fährt ___ dem Bus.',c:'mit',o:['mit','in','auf'],e:'mit + Dativ'}];
+
+const W_QUESTIONS=[{s:'Der Hund bellt laut.',q:'___ bellt?',a:'Wer',t:'Nominativ'},{s:'Lisa malt ein Bild.',q:'___ malt Lisa?',a:'Was',t:'Akkusativ'},{s:'Tim geht in die Schule.',q:'___ geht Tim?',a:'Wohin',t:'Richtung'},{s:'Die Schule beginnt um 8 Uhr.',q:'___ beginnt die Schule?',a:'Wann',t:'Zeit'},{s:'Ich bin im Garten.',q:'___ bist du?',a:'Wo',t:'Ort'},{s:'Sie weint, weil sie traurig ist.',q:'___ weint sie?',a:'Warum',t:'Grund'},{s:'Mir geht es gut.',q:'___ geht es dir?',a:'Wie',t:'Art und Weise'}];
+
+const CASES={3:[{b:'der Hund',n:'der Hund',g:'des Hundes',d:'dem Hund',a:'den Hund',ex:{n:'Der Hund bellt.',d:'Ich gebe dem Hund Futter.',a:'Ich sehe den Hund.'}},{b:'die Katze',n:'die Katze',g:'der Katze',d:'der Katze',a:'die Katze',ex:{n:'Die Katze schläft.',d:'Ich gebe der Katze Milch.',a:'Ich streichle die Katze.'}}],4:[{b:'das Kind',n:'das Kind',g:'des Kindes',d:'dem Kind',a:'das Kind',ex:{n:'Das Kind lacht.',d:'Ich helfe dem Kind.',a:'Ich rufe das Kind.'}},{b:'der Lehrer',n:'der Lehrer',g:'des Lehrers',d:'dem Lehrer',a:'den Lehrer',ex:{n:'Der Lehrer erklärt.',d:'Ich gebe dem Lehrer mein Heft.',a:'Ich verstehe den Lehrer.'}}]};
+
+const TENSES={3:[{b:'spielen',pr:'ich spiele',pt:'ich spielte',pf:'ich habe gespielt'},{b:'laufen',pr:'ich laufe',pt:'ich lief',pf:'ich bin gelaufen'},{b:'lesen',pr:'ich lese',pt:'ich las',pf:'ich habe gelesen'}],4:[{b:'gehen',pr:'ich gehe',pt:'ich ging',pf:'ich bin gegangen',fu:'ich werde gehen'},{b:'kommen',pr:'ich komme',pt:'ich kam',pf:'ich bin gekommen',fu:'ich werde kommen'},{b:'sehen',pr:'ich sehe',pt:'ich sah',pf:'ich habe gesehen',fu:'ich werde sehen'}]};
+
+const SENTENCE_STRUCTURE=[{w:['geht','Tim','zur','Schule'],c:'Tim geht zur Schule.',e:'Subjekt + Verb + Rest'},{w:['singt','ein','Lied','Lisa'],c:'Lisa singt ein Lied.',e:'Subjekt + Verb + Objekt'},{w:['Apfel','einen','isst','Er'],c:'Er isst einen Apfel.',e:'Subjekt + Verb + Objekt'},{w:['sind','im','Garten','Wir'],c:'Wir sind im Garten.',e:'Subjekt + Verb + Ort'},{w:['scheint','Sonne','Die'],c:'Die Sonne scheint.',e:'Subjekt + Verb'}];
+
+const WORD_FAMILIES=[{r:'fahr',w:['fahren','Fahrer','Fahrt','Fahrrad','Abfahrt'],e:'Stamm "fahr"'},{r:'spiel',w:['spielen','Spieler','Spiel','Spielzeug','Spielplatz'],e:'Stamm "spiel"'},{r:'lern',w:['lernen','Lerner','Lehrer','Lehre','gelehrt'],e:'Stamm "lern/lehr"'},{r:'wohn',w:['wohnen','Wohnung','Bewohner','Wohnzimmer'],e:'Stamm "wohn"'}];
+
+// === DISTRACTOR ENGINE ===
+const Distractors={artikel:c=>['der','die','das'].filter(a=>a!==c),wortart:c=>['Nomen','Verb','Adjektiv','Artikel','Pronomen','Adverb','Präposition','Konjunktion'].filter(t=>t!==c),fall:c=>['Nominativ','Genitiv','Dativ','Akkusativ'].filter(f=>f!==c),zeitform:c=>['Präsens','Präteritum','Perfekt','Futur'].filter(z=>z!==c)};
+
+// === GENERATORS ===
+const Gen={
+  spelling(lvl){const items=SPELLING[Math.min(lvl,4)]||SPELLING[2];const it=Utils.pick(items);return{type:'spelling',q:'Welches Wort ist richtig geschrieben?',a:it.w,options:Utils.shuffle([it.w,...it.x.slice(0,2)]),explain:`<b>${it.w}</b><br>${it.t}`,focus:'Rechtschreibung'}},
+  sSharp(){const it=Utils.pick(S_SHARP);return{type:'sSharp',q:'Welches Wort ist richtig geschrieben?',a:it.w,options:Utils.shuffle([it.w,...it.x.slice(0,2)]),explain:`<b>${it.w}</b><br>${it.t}`,focus:'s, ss oder ß'}},
+  artikel(lvl){const nouns=NOUNS[Math.min(lvl,4)]||NOUNS[2];const n=Utils.pick(nouns);return{type:'artikel',q:`Welcher Artikel gehört zu "${n.w}"?`,a:n.a,options:Utils.shuffle([n.a,...Distractors.artikel(n.a)]),explain:`<b>${n.a} ${n.w}</b>${n.t?'<br>'+n.t:''}`,focus:'Artikel'}},
+  plural(lvl){const nouns=NOUNS[Math.min(lvl,4)]||NOUNS[2];const valid=nouns.filter(n=>n.p&&n.p!==n.w);const n=Utils.pick(valid);const wrong=[n.w+'e',n.w+'en',n.w+'s'].filter(w=>w!==n.p).slice(0,2);return{type:'plural',q:`Wie heißt die Mehrzahl?\n\nein ${n.w} → viele ___`,a:n.p,options:Utils.shuffle([n.p,...wrong]),explain:`<b>die ${n.p}</b><br>Einzahl: ${n.a} ${n.w}`,focus:'Mehrzahl'}},
+  wortart(lvl){const items=WORD_TYPES[Math.min(Math.max(lvl,2),4)];const it=Utils.pick(items);return{type:'wortart',q:`Welche Wortart ist "${it.w}"?`,a:it.t,options:Utils.shuffle([it.t,...Distractors.wortart(it.t).slice(0,2)]),explain:`<b>${it.w}</b> ist ein <b>${it.t}</b><br>${it.h}`,focus:'Wortarten'}},
+  wfrage(){const it=Utils.pick(W_QUESTIONS);const ws=['Wer','Was','Wann','Wo','Wohin','Warum','Wie'];return{type:'wfrage',q:`"${it.s}"\n\n${it.q}`,a:it.a,options:Utils.shuffle([it.a,...ws.filter(w=>w!==it.a).slice(0,2)]),explain:`<b>${it.a}</b> fragt nach: ${it.t}`,focus:'W-Fragen'}},
+  fall(lvl){const items=CASES[Math.min(Math.max(lvl,3),4)];const n=Utils.pick(items);const cases=['nominativ','dativ','akkusativ'];const qs={nominativ:'Wer oder was?',dativ:'Wem?',akkusativ:'Wen oder was?'};const sel=Utils.pick(cases);const name=sel.charAt(0).toUpperCase()+sel.slice(1);return{type:'fall',q:`"${n.ex[sel]}"\n\nWelcher Fall?`,a:name,options:Utils.shuffle([name,...Distractors.fall(name).slice(0,2)]),explain:`<b>${name}</b><br>Frage: ${qs[sel]}`,focus:'4 Fälle'}},
+  verb(lvl){const verbs=VERBS[Math.min(lvl,4)]||VERBS[2];const v=Utils.pick(verbs);const wrong=[v.c+'e',v.c+'t',v.c+'en'].filter(w=>w!==v.c).slice(0,2);return{type:'verb',q:`Konjugiere: "${v.i}"\n\n${v.p} ___`,a:v.c,options:Utils.shuffle([v.c,...wrong]),explain:`<b>${v.p} ${v.c}</b><br>Regel: ${v.r}`,focus:'Konjugation'}},
+  zeitform(lvl){const verbs=TENSES[Math.min(Math.max(lvl,3),4)];const v=Utils.pick(verbs);const ts=[{n:'Präsens',f:v.pr},{n:'Präteritum',f:v.pt},{n:'Perfekt',f:v.pf}];if(v.fu)ts.push({n:'Futur',f:v.fu});const t=Utils.pick(ts);return{type:'zeitform',q:`In welcher Zeitform steht:\n\n"${t.f}"?`,a:t.n,options:Utils.shuffle([t.n,...Distractors.zeitform(t.n).slice(0,2)]),explain:`<b>${t.f}</b> ist <b>${t.n}</b> von "${v.b}"`,focus:'Zeitformen'}},
+  preposition(){const p=Utils.pick(PREPOSITIONS);return{type:'preposition',q:`Welche Präposition passt?\n\n${p.s}`,a:p.c,options:Utils.shuffle(p.o),explain:`<b>${p.c}</b><br>${p.e}`,focus:'Präpositionen'}},
+  punctuation(){const it=Utils.pick(PUNCTUATION);return{type:'punctuation',q:`Welches Satzzeichen fehlt?\n\n"${it.s}___"`,a:it.c,options:Utils.shuffle(['.','!','?']),explain:`<b>${it.c}</b> – ${it.e}<br>Satzart: ${it.t}`,focus:'Satzzeichen'}},
+  syllables(){const it=Utils.pick(SYLLABLES);return{type:'syllables',q:`Wie trennt man "${it.w}" richtig?`,a:it.c,options:Utils.shuffle([it.c,...it.x]),explain:`<b>${it.c}</b><br>${it.e}`,focus:'Silbentrennung'}},
+  capitalization(){const it=Utils.pick(CAPITALIZATION);return{type:'capitalization',q:`Groß oder klein?\n\n${it.s}`,a:it.c,options:Utils.shuffle([it.c,it.x]),explain:`<b>${it.c}</b><br>${it.e}`,focus:'Groß-/Kleinschreibung'}},
+  opposite(){const it=Utils.pick(OPPOSITES);return{type:'opposite',q:`Was ist das Gegenteil von "${it.w}"?`,a:it.o,options:Utils.shuffle([it.o,...it.x]),explain:`<b>${it.w} ↔ ${it.o}</b>`,focus:'Gegenteile'}},
+  synonym(){const it=Utils.pick(SYNONYMS);const syn=Utils.pick(it.s);return{type:'synonym',q:`Welches Wort bedeutet ähnlich wie "${it.w}"?`,a:syn,options:Utils.shuffle([syn,...it.x]),explain:`<b>${it.w}</b> ≈ <b>${syn}</b>`,focus:'Synonyme'}},
+  compound(){const it=Utils.pick(COMPOUNDS);const wrong=COMPOUNDS.filter(c=>c.c!==it.c).map(c=>c.c).slice(0,2);return{type:'compound',q:`Welches Wort entsteht aus:\n\n${it.p.join(' + ')}?`,a:it.c,options:Utils.shuffle([it.c,...wrong]),explain:`<b>${it.p.join(' + ')} = ${it.c}</b><br>${it.e}`,focus:'Zusammensetzung'}},
+  wordFamily(){const fam=Utils.pick(WORD_FAMILIES);const word=Utils.pick(fam.w);const others=WORD_FAMILIES.filter(f=>f.r!==fam.r).flatMap(f=>f.w).slice(0,2);return{type:'wordFamily',q:`Welches Wort gehört zur Wortfamilie "${fam.r}"?`,a:word,options:Utils.shuffle([word,...others]),explain:`Wortfamilie <b>${fam.r}</b>:<br>${fam.w.join(', ')}`,focus:'Wortfamilien'}},
+  oberbegriff(){const cat=Utils.pick(CATEGORIES);const mem=Utils.pick(cat.m);return{type:'oberbegriff',q:`Welches Wort gehört zu "${cat.c}"?`,a:mem,options:Utils.shuffle([mem,...cat.x]),explain:`<b>${cat.c}</b>: ${cat.m.join(', ')}`,focus:'Oberbegriffe'}},
+  satzbau(){const it=Utils.pick(SENTENCE_STRUCTURE);const shuf=Utils.shuffle([...it.w]);const wrong=[shuf.join(' ')+'.',it.w.slice().reverse().join(' ')+'.'].filter(s=>s!==it.c).slice(0,1);return{type:'satzbau',q:`Ordne die Wörter:\n\n${shuf.join(' – ')}`,a:it.c,options:Utils.shuffle([it.c,...wrong,shuf.slice(1).concat(shuf[0]).join(' ')+'.']),explain:`<b>${it.c}</b><br>${it.e}`,focus:'Satzbau'}}
+};
+
+const MasterGen={
+  types:Object.keys(Gen),
+  generate(type,lvl){return Gen[type](lvl)},
+  random(lvl){let types=this.types;if(lvl===1)types=['spelling','artikel','plural','opposite','punctuation','oberbegriff'];else if(lvl===2)types=['spelling','sSharp','artikel','plural','wortart','punctuation','opposite','syllables','compound','oberbegriff'];return this.generate(Utils.pick(types),lvl)}
+};
+
+// === UI ===
+const updateStats=()=>{$('score').textContent=state.score;$('total').textContent=state.total;$('streak').textContent=state.streak};
+const updateHistoryDots=()=>{$('history-dots').innerHTML=state.history.slice(-10).map(h=>`<div class="dot ${h.correct?'correct':'incorrect'}">${h.correct?'✓':'✗'}</div>`).join('')};
+const showFeedback=(text,type='')=>{const fb=$('feedback');fb.className='feedback'+(type?' '+type:'');fb.innerHTML=`<span class="ficon">${type==='success'?'✅':type==='error'?'❌':'🎯'}</span><span>${text}</span>`};
+
+const openModal=id=>$(id).classList.add('open');
+const closeModal=id=>$(id).classList.remove('open');
+
+const showStatsModal=()=>{const acc=state.total>0?Math.round((state.score/state.total)*100):0;$('stats-content').innerHTML=`<div class="stats-grid"><div class="stat-card"><div class="stat-card-value">${state.total}</div><div class="stat-card-label">Aufgaben</div></div><div class="stat-card"><div class="stat-card-value">${state.score}</div><div class="stat-card-label">Richtig</div></div><div class="stat-card"><div class="stat-card-value">${acc}%</div><div class="stat-card-label">Genauigkeit</div></div><div class="stat-card"><div class="stat-card-value">${state.maxStreak}</div><div class="stat-card-label">Beste Serie</div></div></div>`;openModal('modal-stats')};
+
+const render=task=>{state.currentTask=task;state.answered=false;$('task-focus').textContent=task.focus;$('task-question').textContent=task.q;$('help-btn').disabled=false;showFeedback('Tippe auf die richtige Lösung');$('answers').innerHTML=task.options.map(o=>`<button class="answer-btn" data-v="${o}">${o}</button>`).join('')};
+
+const handleAnswer=(btn,val)=>{if(state.answered)return;state.answered=true;state.total++;const ok=String(val)===String(state.currentTask.a);if(ok){state.score++;state.streak++;if(state.streak>state.maxStreak)state.maxStreak=state.streak;btn.classList.add('correct');showFeedback('Richtig! Super gemacht!','success');playCorrect()}else{state.streak=0;btn.classList.add('incorrect');document.querySelectorAll('.answer-btn').forEach(b=>{if(String(b.dataset.v)===String(state.currentTask.a))b.classList.add('correct')});showFeedback(`Fast! Die Antwort ist ${state.currentTask.a}`,'error');playIncorrect()}document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);state.history.push({correct:ok});updateStats();updateHistoryDots();saveState()};
+
+const newTask=()=>{const type=$('task-type').value;try{render(type==='random'?MasterGen.random(state.grade):MasterGen.generate(type,state.grade))}catch(e){$('task-question').textContent='Fehler: '+e.message}};
+
+// === EVENT LISTENERS ===
+$('grades').onclick=e=>{const btn=e.target.closest('.grade-btn');if(!btn)return;state.grade=+btn.dataset.g;document.querySelectorAll('.grade-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');saveState()};
+$('start-btn').onclick=newTask;
+$('help-btn').onclick=()=>{if(!state.currentTask)return;$('help-content').innerHTML=`<div class="explain-box"><div class="explain-title">💡 Erklärung</div>${state.currentTask.explain}<div class="explain-result">Die Antwort ist: ${state.currentTask.a}</div></div>`;openModal('modal-help')};
+$('stats-btn').onclick=showStatsModal;
+$('stats-pill').onclick=showStatsModal;
+$('settings-btn').onclick=()=>openModal('modal-settings');
+$('toggle-sound').onclick=()=>{state.settings.sound=!state.settings.sound;$('toggle-sound').classList.toggle('on');saveState()};
+$('toggle-keyboard').onclick=()=>{state.settings.keyboard=!state.settings.keyboard;$('toggle-keyboard').classList.toggle('on');saveState()};
+$('reset-stats').onclick=()=>{if(!confirm('Wirklich alle Statistiken zurücksetzen?'))return;state.score=0;state.total=0;state.streak=0;state.maxStreak=0;state.history=[];updateStats();updateHistoryDots();saveState();closeModal('modal-settings')};
+['help','settings','stats'].forEach(n=>{$(`ok-${n}`).onclick=()=>closeModal(`modal-${n}`);$(`modal-${n}`).onclick=e=>{if(e.target===$(`modal-${n}`))closeModal(`modal-${n}`)}});
+$('answers').onclick=e=>{const b=e.target.closest('.answer-btn');if(b)handleAnswer(b,b.dataset.v)};
+document.onkeydown=e=>{if(!state.settings.keyboard)return;if(e.key==='Escape'){['help','settings','stats'].forEach(n=>closeModal(`modal-${n}`));return}if(document.querySelector('.overlay.open'))return;if(e.key==='Enter'||e.key===' '){e.preventDefault();$('start-btn').click()}else if('1234'.includes(e.key)){const btn=document.querySelectorAll('.answer-btn')[+e.key-1];if(btn)btn.click()}};
+
+// === INIT ===
+loadState();updateStats();updateHistoryDots();
+console.log('✅ Deutsch üben geladen.');
+})();
+</script>
+</body>
+</html>
